@@ -85,20 +85,14 @@ if st.button('Predict'):
 
     # Calculate costs
     daily_salary = average_salary / 250  # Assuming 250 working days in a year
-    cost_per_day_off = daily_salary
-    total_cost_current = total_days_off * cost_per_day_off
+    total_cost_current = total_days_off * daily_salary
 
     # Calculate savings with the solution
     reduction_in_high_risk = predicted_high_risk_employees * solution_effectiveness
     reduced_high_risk_employees = int(round(predicted_high_risk_employees - reduction_in_high_risk, 0))
     reduced_days_off = reduced_high_risk_employees * days_off_per_high_risk
-    total_cost_with_solution = reduced_days_off * cost_per_day_off
+    total_cost_with_solution = reduced_days_off * daily_salary
     savings = total_cost_current - total_cost_with_solution
-
-    # Calculate percentage reductions
-    percentage_reduction_high_risk = (predicted_high_risk_employees - reduced_high_risk_employees) / predicted_high_risk_employees * 100
-    percentage_reduction_days_off = (total_days_off - reduced_days_off) / total_days_off * 100
-    percentage_reduction_cost = (total_cost_current - total_cost_with_solution) / total_cost_current * 100
 
     # Data for vertical bar chart
     data = pd.DataFrame({
@@ -106,15 +100,15 @@ if st.button('Predict'):
         'Amount': [total_cost_current, total_cost_with_solution, savings]
     })
 
-    # Vertical bar chart with title and value labels above the bars
+    # Vertical bar chart with value labels above the bars and title
     bars = alt.Chart(data).mark_bar().encode(
-        x=alt.X('Metric:N', title='', sort=['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'], axis=alt.Axis(labelAngle=0)),
+        x=alt.X('Metric:N', title='', sort=['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'], axis=alt.Axis(labelAngle=0, labelFontSize=12)),
         y=alt.Y('Amount:Q', title='Cost (€)'),
         color=alt.Color('Metric:N', scale=alt.Scale(domain=['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'], range=['#ff7f0e','#1f77b4', '#2ca02c']), legend=None)
     ).properties(
         height=300,
         width=700,
-        title="Predicted Costs"  # Set the chart title
+        title=alt.TitleParams(text='Predicted Costs', anchor='start', fontSize=16)
     )
 
     text = bars.mark_text(
@@ -139,9 +133,10 @@ if st.button('Predict'):
     with col_solution:
         st.markdown("<div class='section-header'>With solution</div>", unsafe_allow_html=True)
         st.markdown(f"<div class='kpi-box'><h2>{reduced_high_risk_employees} <span class='percentage'>↓{percentage_reduction_high_risk:.2f}%</span></h2><p>High Risk Employees</p></div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='kpi-box'><h2>{reduced_days_off:.2f} <span class='percentage'>↓{percentage_reduction_days_off:.2f}%</span></h2><p>Total Days Off</p></div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='kpi-box'><h2>{reduced_days_off:.2f} <span class='percentage'>↓{percentage_reduction_days_off:.2f}%</span></h2><p>Total Days Off</p></div>", unsafe_allowhtml=True)
         st.markdown(f"<div class='kpi-box'><h2>€{total_cost_with_solution:.2f} <span class='percentage'>↓{percentage_reduction_cost:.2f}%</span></h2><p>Total Cost of Days Off</p></div>", unsafe_allow_html=True)
 
     # KPI-style box for estimated savings with green value only
     st.markdown(f"<div class='kpi-box'><h2>Estimated Yearly Savings</h2><h2><span class='value' style='color:#28a745'>€{savings:.2f}</span></h2></div>", unsafe_allow_html=True)
+
 
