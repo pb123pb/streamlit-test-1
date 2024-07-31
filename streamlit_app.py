@@ -105,36 +105,12 @@ if st.button('Predict'):
     ).properties(
         height=300,
         width=700,
-        title=alt.TitleParams(text='Predicted Costs', anchor='start', fontSize=16)
+        title=alt.TitleParams(text='Predicted Costs', anchor='middle', fontSize=16, dy=-10)
     )
 
     text = bars.mark_text(
-        align='center',
-        baseline='bottom',
-        dy=-10  # Position the text above the bars
-    ).encode(
-        text=alt.Text('Amount:Q', format=',.2f€')
-    )
+        align='
 
-    st.altair_chart(bars + text, use_container_width=True)
-
-    # Display detailed results in two KPI-style boxes
-    col_current, col_solution = st.columns(2)
-
-    with col_current:
-        st.markdown("<div class='section-header'>Without solution</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='kpi-box'><h2>{predicted_high_risk_employees}</h2><p>High Risk Employees</p></div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='kpi-box'><h2>{total_days_off:.2f}</h2><p>Total Days Off</p></div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='kpi-box'><h2>€{total_cost_current:.2f}</h2><p>Total Cost of Days Off</p></div>", unsafe_allow_html=True)
-
-    with col_solution:
-        st.markdown("<div class='section-header'>With solution</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='kpi-box'><h2>{reduced_high_risk_employees} <span class='percentage'>↓{percentage_reduction_high_risk:.2f}%</span></h2><p>High Risk Employees</p></div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='kpi-box'><h2>{reduced_days_off:.2f} <span class='percentage'>↓{percentage_reduction_days_off:.2f}%</span></h2><p>Total Days Off</p></div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='kpi-box'><h2>€{total_cost_with_solution:.2f} <span class='percentage'>↓{percentage_reduction_cost:.2f}%</span></h2><p>Total Cost of Days Off</p></div>", unsafe_allow_html=True)
-
-    # KPI-style box for estimated savings with green value only
-    st.markdown(f"<div class='kpi-box'><h2>Estimated Yearly Savings</h2><h2><span class='value' style='color:#28a745'>€{savings:.2f}</span></h2></div>", unsafe_allow_html=True)
 
 
 
