@@ -49,6 +49,7 @@ st.write("Estimate the financial impact of our mental health solution by identif
 
 # Sidebar for input fields
 with st.sidebar:
+    # Input fields
     num_employees = st.number_input('Number of Employees', min_value=1, value=1000)
     industry = st.selectbox('Industry', ['Tech', 'Healthcare', 'Finance', 'Manufacturing', 'Retail'])
 
@@ -68,24 +69,36 @@ if st.button('Predict'):
     with st.spinner('Calculating results...'):
         time.sleep(2)  # Simulate a delay for calculation
 
+    # Extract industry-specific values
     industry_values = industry_data.get(industry, {})
     triage_pct = industry_values.get('triage_pct', 50)
     high_risk_pct = industry_values.get('high_risk_pct', 15.0) / 100
     average_salary = industry_values.get('average_salary', 70000)
     solution_effectiveness = industry_values.get('solution_effectiveness', 0.30)
 
+    # Calculate the number of employees triaged
     triaged_employees = num_employees * (triage_pct / 100)
+
+    # Calculate predicted high-risk employees and days off based on triaged employees
     predicted_high_risk_employees = int(round(triaged_employees * high_risk_pct, 0))
     total_days_off = predicted_high_risk_employees * days_off_per_high_risk
 
+    # Calculate costs
     daily_salary = average_salary / 250  # Assuming 250 working days in a year
-    total_cost_current = total_days_off * daily_salary
+    cost_per_day_off = daily_salary
+    total_cost_current = total_days_off * cost_per_day_off
 
+    # Calculate savings with the solution
     reduction_in_high_risk = predicted_high_risk_employees * solution_effectiveness
     reduced_high_risk_employees = int(round(predicted_high_risk_employees - reduction_in_high_risk, 0))
     reduced_days_off = reduced_high_risk_employees * days_off_per_high_risk
-    total_cost_with_solution = reduced_days_off * daily_salary
+    total_cost_with_solution = reduced_days_off * cost_per_day_off
     savings = total_cost_current - total_cost_with_solution
+
+    # Calculate percentage reductions
+    percentage_reduction_high_risk = (predicted_high_risk_employees - reduced_high_risk_employees) / predicted_high_risk_employees * 100
+    percentage_reduction_days_off = (total_days_off - reduced_days_off) / total_days_off * 100
+    percentage_reduction_cost = (total_cost_current - total_cost_with_solution) / total_cost_current * 100
 
     # Data for vertical bar chart
     data = pd.DataFrame({
@@ -109,7 +122,7 @@ if st.button('Predict'):
         baseline='bottom',
         dy=-10  # Position the text above the bars
     ).encode(
-        text=alt.Text('Amount:Q', format=',.2f €')  # Add euro sign after the value
+        text=alt.Text('Amount:Q', format=',.2f')
     )
 
     st.altair_chart(bars + text, use_container_width=True)
