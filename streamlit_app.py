@@ -108,10 +108,6 @@ if st.button('Predict'):
         title=alt.TitleParams(text='Predicted Costs', anchor='middle', fontSize=16)
     ).configure_axis(
         labelPadding=10  # Increase padding for axis labels
-    ).configure_view(
-        strokeOpacity=0  # Remove borders around the chart to avoid clipping
-    ).configure_bounds(
-        bounds='flush'  # Ensure all chart elements are within the view
     )
 
     text = bars.mark_text(
