@@ -109,7 +109,7 @@ if st.button('Predict'):
     # Vertical bar chart with value labels above the bars and title
     bars = alt.Chart(data).mark_bar().encode(
         x=alt.X('Metric:N', title='', sort=['Without ifeel', 'With ifeel', 'Estimated Savings'], axis=alt.Axis(labelAngle=0)),  # Horizontal x-axis labels
-        y=alt.Y('Amount:Q', title='Cost (€)'),
+        y=alt.Y('Amount:Q', title='€'),
         color=alt.Color('Metric:N', scale=alt.Scale(domain=['Without ifeel', 'With ifeel', 'Estimated Savings'], range=['#ff7f0e','#1f77b4', '#2ca02c']), legend=None)
     ).properties(
         height=300,
