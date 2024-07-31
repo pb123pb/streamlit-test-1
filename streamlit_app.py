@@ -105,13 +105,8 @@ if st.button('Predict'):
     ).properties(
         height=350,  # Increased height
         width=700,
-        title='Predicted Costs'
-    ).configure_axis(
-        labelPadding=10  # Increase padding for axis labels
-    ).configure_view(
-        strokeWidth=0  # Remove borders around the chart to avoid clipping
-    ).configure_padding(
-        bottom=40  # Increase bottom padding to avoid clipping
+        title='Predicted Costs',
+        padding={'bottom': 40}  # Increase bottom padding
     )
 
     text = bars.mark_text(
