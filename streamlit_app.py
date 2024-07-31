@@ -86,11 +86,6 @@ if st.button('Predict'):
     total_cost_with_solution = reduced_days_off * daily_salary
     savings = total_cost_current - total_cost_with_solution
 
-    # Calculate percentage reductions
-    percentage_reduction_high_risk = ((predicted_high_risk_employees - reduced_high_risk_employees) / predicted_high_risk_employees) * 100
-    percentage_reduction_days_off = ((total_days_off - reduced_days_off) / total_days_off) * 100
-    percentage_reduction_cost = ((total_cost_current - total_cost_with_solution) / total_cost_current) * 100
-
     # Data for vertical bar chart
     data = pd.DataFrame({
         'Metric': ['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'],
@@ -106,25 +101,21 @@ if st.button('Predict'):
         height=400,  # Increased height for better label visibility
         width=700,
         title='Predicted Costs'
-    ).configure_axis(
-        labelFontSize=12,
-        titleFontSize=14,
-        labelPadding=15,  # Increased padding to avoid cutting off labels
-    ).configure_view(
-        stroke=None  # Remove borders around the chart
     )
 
     # Adding text labels above the bars
     text = bars.mark_text(
         align='center',
-        baseline='bottom',
+        baseline='middle',  # Center the text vertically
         dy=-10  # Position the text above the bars
     ).encode(
         text=alt.Text('Amount:Q', format=',.2f€')
     )
 
-    # Layer the bar and text charts
-    chart = bars + text
+    # Combine the bar and text layers
+    chart = alt.layer(bars, text).configure_axis(
+        labelPadding=15  # Increased padding to avoid cutting off labels
+    )
 
     st.altair_chart(chart, use_container_width=True)
 
@@ -145,6 +136,7 @@ if st.button('Predict'):
 
     # KPI-style box for estimated savings with green value only
     st.markdown(f"<div class='kpi-box'><h2>Estimated Yearly Savings</h2><h2><span class='value' style='color:#28a745'>€{savings:.2f}</span></h2></div>", unsafe_allow_html=True)
+
 
 
 
