@@ -100,13 +100,14 @@ if st.button('Predict'):
     ).properties(
         height=400,  # Increased height for better label visibility
         width=700,
-        title='Predicted Costs'
+        title='Predicted Costs',
+        padding={"bottom": 50}  # Increased bottom padding
     )
 
     # Adding text labels above the bars
     text = bars.mark_text(
         align='center',
-        baseline='middle',  # Center the text vertically
+        baseline='bottom',
         dy=-10  # Position the text above the bars
     ).encode(
         text=alt.Text('Amount:Q', format=',.2f€')
@@ -114,7 +115,7 @@ if st.button('Predict'):
 
     # Combine the bar and text layers
     chart = alt.layer(bars, text).configure_axis(
-        labelPadding=15  # Increased padding to avoid cutting off labels
+        labelPadding=20  # Increased padding to avoid cutting off labels
     )
 
     st.altair_chart(chart, use_container_width=True)
@@ -136,6 +137,7 @@ if st.button('Predict'):
 
     # KPI-style box for estimated savings with green value only
     st.markdown(f"<div class='kpi-box'><h2>Estimated Yearly Savings</h2><h2><span class='value' style='color:#28a745'>€{savings:.2f}</span></h2></div>", unsafe_allow_html=True)
+
 
 
 
