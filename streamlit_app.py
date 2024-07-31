@@ -105,10 +105,10 @@ if st.button('Predict'):
     ).properties(
         height=350,  # Increased height
         width=700,
-        title='Predicted Costs',
-        padding={'bottom': 40}  # Increase bottom padding
+        title='Predicted Costs'
     )
 
+    # Adding text labels above the bars
     text = bars.mark_text(
         align='center',
         baseline='bottom',
@@ -118,7 +118,7 @@ if st.button('Predict'):
     )
 
     # Layer the bar and text charts
-    chart = alt.layer(bars, text)
+    chart = bars + text
 
     st.altair_chart(chart, use_container_width=True)
 
