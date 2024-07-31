@@ -102,15 +102,15 @@ if st.button('Predict'):
 
     # Data for vertical bar chart
     data = pd.DataFrame({
-        'Metric': ['Predicted Cost', 'Predicted Cost with ifeel', 'Estimated Savings'],
+        'Metric': ['Without ifeel', 'With ifeel', 'Estimated Savings'],
         'Amount': [total_cost_current, total_cost_with_solution, savings]
     })
 
     # Vertical bar chart with value labels above the bars and title
     bars = alt.Chart(data).mark_bar().encode(
-        x=alt.X('Metric:N', title='', sort=['Predicted Cost', 'Predicted Cost with ifeel', 'Estimated Savings'], axis=alt.Axis(labelAngle=0)),  # Horizontal x-axis labels
+        x=alt.X('Metric:N', title='', sort=['Without ifeel', 'With ifeel', 'Estimated Savings'], axis=alt.Axis(labelAngle=0)),  # Horizontal x-axis labels
         y=alt.Y('Amount:Q', title='Cost (€)'),
-        color=alt.Color('Metric:N', scale=alt.Scale(domain=['Predicted Cost', 'Predicted Cost with ifeel', 'Estimated Savings'], range=['#ff7f0e','#1f77b4', '#2ca02c']), legend=None)
+        color=alt.Color('Metric:N', scale=alt.Scale(domain=['Without ifeel', 'With ifeel', 'Estimated Savings'], range=['#ff7f0e','#1f77b4', '#2ca02c']), legend=None)
     ).properties(
         height=300,
         width=700,  # Set a reasonable width for the chart
