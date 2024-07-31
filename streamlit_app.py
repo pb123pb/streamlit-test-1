@@ -49,7 +49,6 @@ st.write("Estimate the financial impact of our mental health solution by identif
 
 # Sidebar for input fields
 with st.sidebar:
-    # Input fields
     num_employees = st.number_input('Number of Employees', min_value=1, value=1000)
     industry = st.selectbox('Industry', ['Tech', 'Healthcare', 'Finance', 'Manufacturing', 'Retail'])
 
@@ -62,37 +61,35 @@ industry_data = {
     'Retail': {'triage_pct': 45, 'high_risk_pct': 7.0, 'average_salary': 19000, 'solution_effectiveness': 0.35}
 }
 
-# Days off per high-risk employee
-days_off_per_high_risk = 19.6  # Updated to 19.6 days per year per high-risk employee
+days_off_per_high_risk = 19.6  # Days off per high-risk employee per year
 
 if st.button('Predict'):
     with st.spinner('Calculating results...'):
         time.sleep(2)  # Simulate a delay for calculation
 
-    # Extract industry-specific values
     industry_values = industry_data.get(industry, {})
     triage_pct = industry_values.get('triage_pct', 50)
     high_risk_pct = industry_values.get('high_risk_pct', 15.0) / 100
     average_salary = industry_values.get('average_salary', 70000)
     solution_effectiveness = industry_values.get('solution_effectiveness', 0.30)
 
-    # Calculate the number of employees triaged
     triaged_employees = num_employees * (triage_pct / 100)
-
-    # Calculate predicted high-risk employees and days off based on triaged employees
     predicted_high_risk_employees = int(round(triaged_employees * high_risk_pct, 0))
     total_days_off = predicted_high_risk_employees * days_off_per_high_risk
 
-    # Calculate costs
     daily_salary = average_salary / 250  # Assuming 250 working days in a year
     total_cost_current = total_days_off * daily_salary
 
-    # Calculate savings with the solution
     reduction_in_high_risk = predicted_high_risk_employees * solution_effectiveness
     reduced_high_risk_employees = int(round(predicted_high_risk_employees - reduction_in_high_risk, 0))
     reduced_days_off = reduced_high_risk_employees * days_off_per_high_risk
     total_cost_with_solution = reduced_days_off * daily_salary
     savings = total_cost_current - total_cost_with_solution
+
+    # Calculate percentage reductions
+    percentage_reduction_high_risk = ((predicted_high_risk_employees - reduced_high_risk_employees) / predicted_high_risk_employees) * 100
+    percentage_reduction_days_off = ((total_days_off - reduced_days_off) / total_days_off) * 100
+    percentage_reduction_cost = ((total_cost_current - total_cost_with_solution) / total_cost_current) * 100
 
     # Data for vertical bar chart
     data = pd.DataFrame({
@@ -133,10 +130,11 @@ if st.button('Predict'):
     with col_solution:
         st.markdown("<div class='section-header'>With solution</div>", unsafe_allow_html=True)
         st.markdown(f"<div class='kpi-box'><h2>{reduced_high_risk_employees} <span class='percentage'>↓{percentage_reduction_high_risk:.2f}%</span></h2><p>High Risk Employees</p></div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='kpi-box'><h2>{reduced_days_off:.2f} <span class='percentage'>↓{percentage_reduction_days_off:.2f}%</span></h2><p>Total Days Off</p></div>", unsafe_allowhtml=True)
+        st.markdown(f"<div class='kpi-box'><h2>{reduced_days_off:.2f} <span class='percentage'>↓{percentage_reduction_days_off:.2f}%</span></h2><p>Total Days Off</p></div>", unsafe_allow_html=True)
         st.markdown(f"<div class='kpi-box'><h2>€{total_cost_with_solution:.2f} <span class='percentage'>↓{percentage_reduction_cost:.2f}%</span></h2><p>Total Cost of Days Off</p></div>", unsafe_allow_html=True)
 
     # KPI-style box for estimated savings with green value only
     st.markdown(f"<div class='kpi-box'><h2>Estimated Yearly Savings</h2><h2><span class='value' style='color:#28a745'>€{savings:.2f}</span></h2></div>", unsafe_allow_html=True)
+
 
 
