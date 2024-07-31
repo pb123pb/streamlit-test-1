@@ -103,9 +103,15 @@ if st.button('Predict'):
         y=alt.Y('Amount:Q', title='Cost (€)', axis=alt.Axis(labelFontSize=12)),
         color=alt.Color('Metric:N', scale=alt.Scale(domain=['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'], range=['#ff7f0e','#1f77b4', '#2ca02c']), legend=None)
     ).properties(
-        height=350,  # Increased height
+        height=400,  # Increased height for better label visibility
         width=700,
         title='Predicted Costs'
+    ).configure_axis(
+        labelFontSize=12,
+        titleFontSize=14,
+        labelPadding=15,  # Increased padding to avoid cutting off labels
+    ).configure_view(
+        stroke=None  # Remove borders around the chart
     )
 
     # Adding text labels above the bars
@@ -139,6 +145,7 @@ if st.button('Predict'):
 
     # KPI-style box for estimated savings with green value only
     st.markdown(f"<div class='kpi-box'><h2>Estimated Yearly Savings</h2><h2><span class='value' style='color:#28a745'>€{savings:.2f}</span></h2></div>", unsafe_allow_html=True)
+
 
 
 
