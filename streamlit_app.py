@@ -100,12 +100,18 @@ if st.button('Predict'):
     # Vertical bar chart with value labels above the bars and title
     bars = alt.Chart(data).mark_bar().encode(
         x=alt.X('Metric:N', title='', sort=['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'], axis=alt.Axis(labelAngle=0, labelFontSize=12)),
-        y=alt.Y('Amount:Q', title='Cost (€)'),
+        y=alt.Y('Amount:Q', title='Cost (€)', axis=alt.Axis(labelFontSize=12)),
         color=alt.Color('Metric:N', scale=alt.Scale(domain=['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'], range=['#ff7f0e','#1f77b4', '#2ca02c']), legend=None)
     ).properties(
         height=350,  # Increased height
         width=700,
         title='Predicted Costs'
+    ).configure_axis(
+        labelPadding=10  # Increase padding for axis labels
+    ).configure_view(
+        strokeWidth=0  # Remove borders around the chart to avoid clipping
+    ).configure_padding(
+        bottom=40  # Increase bottom padding to avoid clipping
     )
 
     text = bars.mark_text(
@@ -117,9 +123,7 @@ if st.button('Predict'):
     )
 
     # Layer the bar and text charts
-    chart = alt.layer(bars, text).configure_axis(
-        labelPadding=10  # Increase padding for axis labels
-    )
+    chart = alt.layer(bars, text)
 
     st.altair_chart(chart, use_container_width=True)
 
@@ -140,6 +144,7 @@ if st.button('Predict'):
 
     # KPI-style box for estimated savings with green value only
     st.markdown(f"<div class='kpi-box'><h2>Estimated Yearly Savings</h2><h2><span class='value' style='color:#28a745'>€{savings:.2f}</span></h2></div>", unsafe_allow_html=True)
+
 
 
 
