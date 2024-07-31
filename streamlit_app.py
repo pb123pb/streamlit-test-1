@@ -106,14 +106,15 @@ if st.button('Predict'):
         'Amount': [total_cost_current, total_cost_with_solution, savings]
     })
 
-    # Vertical bar chart with value labels above the bars
+    # Vertical bar chart with title and value labels above the bars
     bars = alt.Chart(data).mark_bar().encode(
-        x=alt.X('Metric:N', title='', sort=['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'], axis=alt.Axis(labelAngle=0)),  # Horizontal x-axis labels
+        x=alt.X('Metric:N', title='', sort=['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'], axis=alt.Axis(labelAngle=0)),
         y=alt.Y('Amount:Q', title='Cost (€)'),
         color=alt.Color('Metric:N', scale=alt.Scale(domain=['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'], range=['#ff7f0e','#1f77b4', '#2ca02c']), legend=None)
     ).properties(
         height=300,
-        width=700  # Set a reasonable width for the chart
+        width=700,
+        title="Predicted Costs"  # Set the chart title
     )
 
     text = bars.mark_text(
@@ -121,7 +122,7 @@ if st.button('Predict'):
         baseline='bottom',
         dy=-10  # Position the text above the bars
     ).encode(
-        text=alt.Text('Amount:Q', format=',.2f')
+        text=alt.Text('Amount:Q', format=',.2f€')
     )
 
     st.altair_chart(bars + text, use_container_width=True)
@@ -143,3 +144,4 @@ if st.button('Predict'):
 
     # KPI-style box for estimated savings with green value only
     st.markdown(f"<div class='kpi-box'><h2>Estimated Yearly Savings</h2><h2><span class='value' style='color:#28a745'>€{savings:.2f}</span></h2></div>", unsafe_allow_html=True)
+
