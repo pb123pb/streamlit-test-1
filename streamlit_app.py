@@ -103,9 +103,15 @@ if st.button('Predict'):
         y=alt.Y('Amount:Q', title='Cost (€)'),
         color=alt.Color('Metric:N', scale=alt.Scale(domain=['Predicted Cost', 'Predicted Cost with solution', 'Estimated Savings'], range=['#ff7f0e','#1f77b4', '#2ca02c']), legend=None)
     ).properties(
-        height=300,
+        height=350,  # Increased height
         width=700,
-        title=alt.TitleParams(text='Predicted Costs', anchor='middle', fontSize=16, dy=-10)
+        title=alt.TitleParams(text='Predicted Costs', anchor='middle', fontSize=16)
+    ).configure_axis(
+        labelPadding=10  # Increase padding for axis labels
+    ).configure_view(
+        strokeOpacity=0  # Remove borders around the chart to avoid clipping
+    ).configure_bounds(
+        bounds='flush'  # Ensure all chart elements are within the view
     )
 
     text = bars.mark_text(
